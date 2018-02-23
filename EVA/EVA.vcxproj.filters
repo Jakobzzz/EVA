@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{78d146f9-0a67-4873-ab75-60b893136e70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{d4adcefb-e2f6-4bb3-b869-ceb4a6c78313}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{4d1434d9-abe0-4b57-843b-70f6c3a68a1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\Imgui">
+      <UniqueIdentifier>{f759aa3f-39bc-4cc4-9a00-25bfe25eb2b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application">
+      <UniqueIdentifier>{398b78a9-6129-4e08-90b4-cf4b8133ffe6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="externals\imgui\include\imgui_draw.cpp">
+      <Filter>GUI\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\include\imgui.cpp">
+      <Filter>GUI\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\include\imgui_dock.cpp">
+      <Filter>GUI\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\include\imgui_impl_dx11.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="externals\imgui\include\imgui_impl_dx11.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
