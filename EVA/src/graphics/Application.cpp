@@ -58,6 +58,7 @@ namespace eva
 				DispatchMessage(&msg);
 				continue;
 			}
+
 			ImGui_ImplDX11_NewFrame();
 			UpdateEditor();
 			Render(DirectX::Colors::Aquamarine);
