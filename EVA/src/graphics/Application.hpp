@@ -26,5 +26,8 @@ namespace eva
 	private:
 		static void CreateRenderTarget();
 		static LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+	private:
+		WNDCLASSEX m_windowClass;
 	};
 }

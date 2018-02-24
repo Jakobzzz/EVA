@@ -36,6 +36,9 @@
     <ClCompile Include="externals\imgui\include\imgui_impl_dx11.cpp">
       <Filter>GUI\Imgui</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils\Shader.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils\D3DUtility.hpp">
@@ -45,6 +48,9 @@
       <Filter>Editor</Filter>
     </ClInclude>
     <ClInclude Include="src\utils\Buffer.hpp">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\Shader.hpp">
       <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>

@@ -20,9 +20,9 @@ namespace eva
 	void Application::Initialize()
 	{
 		//Create application window
-		WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("EVA"), NULL };
-		RegisterClassEx(&wc);
-		HWND hwnd = CreateWindow(_T("EVA"), _T("EVA engine - DirectX11.0"), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
+		m_windowClass = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("EVA"), NULL };
+		RegisterClassEx(&m_windowClass);
+		HWND hwnd = CreateWindow(_T("EVA"), _T("EVA engine - DirectX11.0"), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, m_windowClass.hInstance, NULL);
 
 		//Initialize Direct3D
 		CreateDeviceD3D(hwnd);
@@ -86,6 +86,7 @@ namespace eva
 		SAFE_RELEASE(&g_swapChain);
 		SAFE_RELEASE(&g_deviceContext);
 		SAFE_RELEASE(&g_device);
+		UnregisterClass(_T("EVA"), m_windowClass.hInstance);
 	}
 
 	void Application::UpdateEditor()
