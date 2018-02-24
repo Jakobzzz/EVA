@@ -146,8 +146,8 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="externals\imgui\include\imgui_impl_dx11.h" />
     <ClInclude Include="src\graphics\Application.hpp" />
+    <ClInclude Include="src\utils\Buffer.hpp" />
     <ClInclude Include="src\utils\D3DUtility.hpp" />
   </ItemGroup>
   <ItemGroup>

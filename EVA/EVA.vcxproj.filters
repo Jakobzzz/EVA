@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Graphics">
-      <UniqueIdentifier>{78d146f9-0a67-4873-ab75-60b893136e70}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utility">
       <UniqueIdentifier>{d4adcefb-e2f6-4bb3-b869-ceb4a6c78313}</UniqueIdentifier>
     </Filter>
@@ -15,6 +12,9 @@
     </Filter>
     <Filter Include="Main">
       <UniqueIdentifier>{398b78a9-6129-4e08-90b4-cf4b8133ffe6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor">
+      <UniqueIdentifier>{78d146f9-0a67-4873-ab75-60b893136e70}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -31,7 +31,7 @@
       <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="src\graphics\Application.cpp">
-      <Filter>Graphics</Filter>
+      <Filter>Editor</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\include\imgui_impl_dx11.cpp">
       <Filter>GUI\Imgui</Filter>
@@ -42,10 +42,10 @@
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\Application.hpp">
-      <Filter>Graphics</Filter>
+      <Filter>Editor</Filter>
     </ClInclude>
-    <ClInclude Include="externals\imgui\include\imgui_impl_dx11.h">
-      <Filter>GUI\Imgui</Filter>
+    <ClInclude Include="src\utils\Buffer.hpp">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

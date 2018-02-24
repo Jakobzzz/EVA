@@ -60,8 +60,8 @@ namespace eva
 			}
 
 			ImGui_ImplDX11_NewFrame();
-			UpdateEditor();
-			Render(DirectX::Colors::Aquamarine);
+			//UpdateEditor();
+			Render(DirectX::Colors::Gray);
 		}
 	}
 
