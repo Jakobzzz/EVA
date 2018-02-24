@@ -6,6 +6,10 @@
 
 namespace eva
 {
+	Shader::Shader(ID3D11Device* device, ID3D11DeviceContext* deviceContext) : m_device(device), m_deviceContext(deviceContext)
+	{
+	}
+
 	void Shader::LoadShadersFromFile(const Shaders::ID & id, const std::string & shaderPath, ShaderType type)
 	{
 		ShaderData data;
@@ -17,8 +21,8 @@ namespace eva
 			data.blobs.resize(2);
 			assert(!D3DCompileFromFile(ToWChar(shaderPath).c_str(), nullptr, nullptr, "VS_MAIN", "vs_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, data.blobs[0].GetAddressOf(), nullptr));
 			assert(!D3DCompileFromFile(ToWChar(shaderPath).c_str(), nullptr, nullptr, "PS_MAIN", "ps_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, data.blobs[1].GetAddressOf(), nullptr));	
-			assert(!g_device->CreateVertexShader(data.blobs[0]->GetBufferPointer(), data.blobs[0]->GetBufferSize(), nullptr, data.vertexShader.GetAddressOf()));
-			assert(!g_device->CreatePixelShader(data.blobs[1]->GetBufferPointer(), data.blobs[1]->GetBufferSize(), nullptr, data.pixelShader.GetAddressOf()));
+			assert(!m_device->CreateVertexShader(data.blobs[0]->GetBufferPointer(), data.blobs[0]->GetBufferSize(), nullptr, data.vertexShader.GetAddressOf()));
+			assert(!m_device->CreatePixelShader(data.blobs[1]->GetBufferPointer(), data.blobs[1]->GetBufferSize(), nullptr, data.pixelShader.GetAddressOf()));
 		}
 
 		auto inserted = m_shaders.insert(std::make_pair(id, std::move(data)));
@@ -41,8 +45,12 @@ namespace eva
 		}
 
 		//Create the input layout for the vertex shader
-		g_device->CreateInputLayout(&inputElementDesc[0], (UINT)inputElementDesc.size(), found->second.blobs[0]->GetBufferPointer(),
+		m_device->CreateInputLayout(&inputElementDesc[0], (UINT)inputElementDesc.size(), found->second.blobs[0]->GetBufferPointer(),
 									found->second.blobs[0]->GetBufferSize(), found->second.layout.GetAddressOf());
+
+		//Release blobs
+		found->second.blobs[0].Reset();
+		found->second.blobs[1].Reset();
 	}
 
 	void Shader::SetShaders(const Shaders::ID & id, Topology topology)
@@ -51,10 +59,10 @@ namespace eva
 
 		if (found->second.type == (VS | PS))
 		{
-			g_deviceContext->VSSetShader(found->second.vertexShader.Get(), nullptr, 0);
-			g_deviceContext->PSSetShader(found->second.pixelShader.Get(), nullptr, 0);
-			g_deviceContext->IASetPrimitiveTopology((D3D11_PRIMITIVE_TOPOLOGY)topology);
-			g_deviceContext->IASetInputLayout(found->second.layout.Get());
+			m_deviceContext->VSSetShader(found->second.vertexShader.Get(), nullptr, 0);
+			m_deviceContext->PSSetShader(found->second.pixelShader.Get(), nullptr, 0);
+			m_deviceContext->IASetPrimitiveTopology((D3D11_PRIMITIVE_TOPOLOGY)topology);
+			m_deviceContext->IASetInputLayout(found->second.layout.Get());
 		}
 	}
 
@@ -64,8 +72,8 @@ namespace eva
 
 		if (found->second.type == (VS | PS))
 		{
-			g_deviceContext->VSSetShader(nullptr, nullptr, 0);
-			g_deviceContext->PSSetShader(nullptr, nullptr, 0);
+			m_deviceContext->VSSetShader(nullptr, nullptr, 0);
+			m_deviceContext->PSSetShader(nullptr, nullptr, 0);
 		}
 	}
 }

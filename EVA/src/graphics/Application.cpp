@@ -1,9 +1,10 @@
 #include <graphics/Application.hpp>
 #include <utils/D3DUtility.hpp>
+#include <utils/Shader.hpp>
+#include <utils/Buffer.hpp>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
 #include <imgui_dock.h>
-#include <d3d11.h>
 #include <tchar.h>
 #include <DirectXColors.h>
 
@@ -15,6 +16,19 @@ namespace eva
 {
 	Application::Application()
 	{
+	}
+
+	Application::~Application() = default;
+
+	void Application::LoadShaders()
+	{
+		m_shaders->LoadShadersFromFile(Shaders::Basic, "src/res/shaders/Primitive.hlsl", VS | PS);
+	}
+
+	void Application::CreateObjects()
+	{
+		m_shaders = std::make_unique<Shader>(m_device.Get(), m_deviceContext.Get());
+		m_buffer = std::make_unique<Buffer>(m_device.Get(), m_deviceContext.Get());
 	}
 
 	void Application::Initialize()
@@ -34,12 +48,16 @@ namespace eva
 		//Setup ImGui binding
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		ImGui_ImplDX11_Init(hwnd, g_device, g_deviceContext);
+		ImGui_ImplDX11_Init(hwnd, m_device.Get(), m_deviceContext.Get());
 		//io.NavFlags |= ImGuiNavFlags_EnableKeyboard;  //Enable Keyboard Controls
 
 		//Setup style and reload saved dock settings
 		ImGui::StyleColorsDark();
 		ImGui::InitDock();
+
+		//Load resources
+		CreateObjects();
+		LoadShaders();
 	}
 
 	void Application::Run()
@@ -67,14 +85,14 @@ namespace eva
 
 	void Application::Render(const FLOAT* color)
 	{
-		g_deviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
-		g_deviceContext->ClearRenderTargetView(g_mainRenderTargetView, color);
+		m_deviceContext->OMSetRenderTargets(1, m_mainRenderTargetView.GetAddressOf(), NULL);
+		m_deviceContext->ClearRenderTargetView(m_mainRenderTargetView.Get(), color);
 
 		//Rendering
 		ImGui::Render();
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-		g_swapChain->Present(1, 0); //Present with vsync (60 Hz)
+		m_swapChain->Present(1, 0); //Present with vsync (60 Hz)
 	}
 
 	void Application::ShutDown()
@@ -82,10 +100,10 @@ namespace eva
 		ImGui_ImplDX11_Shutdown();
 		ImGui::DestroyContext();
 
-		SAFE_RELEASE(&g_mainRenderTargetView);
-		SAFE_RELEASE(&g_swapChain);
-		SAFE_RELEASE(&g_deviceContext);
-		SAFE_RELEASE(&g_device);
+		m_mainRenderTargetView.Reset();
+		m_swapChain.Reset();
+		m_deviceContext.Reset();
+		m_device.Reset();
 		UnregisterClass(_T("EVA"), m_windowClass.hInstance);
 	}
 
@@ -135,8 +153,8 @@ namespace eva
 	void Application::CreateRenderTarget()
 	{
 		ID3D11Texture2D* pBackBuffer;
-		g_swapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
-		g_device->CreateRenderTargetView(pBackBuffer, NULL, &g_mainRenderTargetView);
+		m_swapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
+		m_device->CreateRenderTargetView(pBackBuffer, NULL, m_mainRenderTargetView.GetAddressOf());
 		SAFE_RELEASE(&pBackBuffer);
 	}
 
@@ -164,7 +182,7 @@ namespace eva
 		D3D_FEATURE_LEVEL featureLevel;
 		const D3D_FEATURE_LEVEL featureLevelArray[2] = { D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_0, };
 		assert(!D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, featureLevelArray, ARRAYSIZE(featureLevelArray),
-			D3D11_SDK_VERSION, &sd, &g_swapChain, &g_device, &featureLevel, &g_deviceContext));
+				D3D11_SDK_VERSION, &sd, m_swapChain.GetAddressOf(), m_device.GetAddressOf(), &featureLevel, m_deviceContext.GetAddressOf()));
 
 		CreateRenderTarget();
 	}
@@ -176,16 +194,6 @@ namespace eva
 
 		switch (msg)
 		{
-		case WM_SIZE:
-			if (g_device != NULL && wParam != SIZE_MINIMIZED)
-			{
-				ImGui_ImplDX11_InvalidateDeviceObjects();
-				SAFE_RELEASE(&g_mainRenderTargetView);
-				g_swapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
-				CreateRenderTarget();
-				ImGui_ImplDX11_CreateDeviceObjects();
-			}
-			return 0;
 		case WM_SYSCOMMAND:
 			if ((wParam & 0xfff0) == SC_KEYMENU) //Disable ALT application menu
 				return 0;

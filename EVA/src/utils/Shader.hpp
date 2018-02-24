@@ -42,6 +42,11 @@ namespace eva
 
 	class Shader
 	{
+	public:
+		Shader() = default;
+		Shader(ID3D11Device* device, ID3D11DeviceContext* deviceContext);
+		~Shader() = default;
+
 	private:
 		struct ShaderData
 		{
@@ -60,5 +65,7 @@ namespace eva
 
 	private:
 		std::map<Shaders::ID, ShaderData> m_shaders;
+		ID3D11Device* m_device;
+		ID3D11DeviceContext* m_deviceContext;
 	};
 }

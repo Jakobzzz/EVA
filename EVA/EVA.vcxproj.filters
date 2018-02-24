@@ -16,6 +16,9 @@
     <Filter Include="Editor">
       <UniqueIdentifier>{78d146f9-0a67-4873-ab75-60b893136e70}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{99d4fb26-4cdd-4558-8ca8-9ff798385744}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\include\imgui_draw.cpp">
@@ -39,6 +42,9 @@
     <ClCompile Include="src\utils\Shader.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils\Buffer.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils\D3DUtility.hpp">
@@ -58,5 +64,10 @@
     <None Include="imgui.ini">
       <Filter>GUI\Imgui</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="src\res\shaders\Primitive.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
