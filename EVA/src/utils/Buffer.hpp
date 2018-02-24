@@ -16,9 +16,9 @@ namespace eva
 
 	public:
 		void CreateVertexBuffer(const void* data, UINT size, UINT stride, ID3D11Buffer** buffer,
-								 D3D11_USAGE usage = D3D11_USAGE_DEFAULT);
+								D3D11_CPU_ACCESS_FLAG flag = D3D11_CPU_ACCESS_READ, D3D11_USAGE usage = D3D11_USAGE_DEFAULT);
 		void CreateIndexBuffer(const void* data, UINT size, UINT stride, ID3D11Buffer** buffer,
-								 D3D11_USAGE usage = D3D11_USAGE_DEFAULT);
+								D3D11_CPU_ACCESS_FLAG flag = D3D11_CPU_ACCESS_READ, D3D11_USAGE usage = D3D11_USAGE_DEFAULT);
 
 	public:
 		void SetVertexBuffer(ID3D11Buffer** buffer, UINT stride);
@@ -28,7 +28,7 @@ namespace eva
 
 	private:
 		void CreateBuffer(const void* data, UINT size, UINT stride, ID3D11Buffer** buffer, D3D11_BIND_FLAG bindFlag,
-							D3D11_USAGE usage = D3D11_USAGE_DEFAULT);
+						   D3D11_CPU_ACCESS_FLAG flag = D3D11_CPU_ACCESS_READ, D3D11_USAGE usage = D3D11_USAGE_DEFAULT);
 
 	private:
 		ID3D11Device * m_device;

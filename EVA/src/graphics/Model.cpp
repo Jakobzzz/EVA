@@ -25,7 +25,7 @@ namespace eva
 
 	void Model::CreateBuffers()
 	{
-		m_buffer->CreateVertexBuffer(vertices, ARRAYSIZE(vertices), sizeof(Vertex), m_vertexBuffer.GetAddressOf());
+		m_buffer->CreateVertexBuffer(vertices, ARRAYSIZE(vertices), sizeof(Vertex), m_vertexBuffer.GetAddressOf(), (D3D11_CPU_ACCESS_FLAG)0);
 		m_shader->CreateInputLayout(Shaders::Basic);
 	}
 
