@@ -45,11 +45,11 @@ namespace eva
 	private:
 		struct ShaderData
 		{
-			std::vector<ComPtr<ID3DBlob>> blobs;
-			ComPtr<ID3D11VertexShader> vertexShader;
-			ComPtr<ID3D11PixelShader> pixelShader;
-			ComPtr<ID3D11InputLayout> layout;
 			ShaderType type;
+			std::vector<ComPtr<ID3DBlob>> blobs;
+			ComPtr<ID3D11VertexShader> vertexShader = nullptr;
+			ComPtr<ID3D11PixelShader> pixelShader = nullptr;
+			ComPtr<ID3D11InputLayout> layout = nullptr;
 		};
 
 	public:
