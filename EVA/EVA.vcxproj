@@ -143,12 +143,14 @@
     <ClCompile Include="externals\imgui\include\imgui_draw.cpp" />
     <ClCompile Include="externals\imgui\include\imgui_impl_dx11.cpp" />
     <ClCompile Include="src\graphics\Application.cpp" />
+    <ClCompile Include="src\graphics\Model.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\utils\Buffer.cpp" />
     <ClCompile Include="src\utils\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\Application.hpp" />
+    <ClInclude Include="src\graphics\Model.hpp" />
     <ClInclude Include="src\utils\Buffer.hpp" />
     <ClInclude Include="src\utils\D3DUtility.hpp" />
     <ClInclude Include="src\utils\Shader.hpp" />

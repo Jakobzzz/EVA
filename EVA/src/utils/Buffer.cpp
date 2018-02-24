@@ -8,20 +8,21 @@ namespace eva
 	}
 
 	void Buffer::CreateVertexBuffer(const void * data, UINT size, UINT stride,
-									ID3D11Buffer ** buffer, D3D11_CPU_ACCESS_FLAG flag, D3D11_USAGE usage)
+									ID3D11Buffer ** buffer, D3D11_USAGE usage)
 	{
-		CreateBuffer(data, size, stride, buffer, D3D11_BIND_VERTEX_BUFFER, flag, usage);
+		CreateBuffer(data, size, stride, buffer, D3D11_BIND_VERTEX_BUFFER, usage);
 	}
 
 	void Buffer::CreateIndexBuffer(const void * data, UINT size, UINT stride, 
-									ID3D11Buffer ** buffer, D3D11_CPU_ACCESS_FLAG flag, D3D11_USAGE usage)
+									ID3D11Buffer ** buffer, D3D11_USAGE usage)
 	{
-		CreateBuffer(data, size, stride, buffer, D3D11_BIND_INDEX_BUFFER, flag, usage);
+		CreateBuffer(data, size, stride, buffer, D3D11_BIND_INDEX_BUFFER, usage);
 	}
 
 	void Buffer::SetVertexBuffer(ID3D11Buffer ** buffer, UINT stride)
 	{
-		m_deviceContext->IASetVertexBuffers(0, 1, buffer, &stride, 0);
+		UINT offset = 0;
+		m_deviceContext->IASetVertexBuffers(0, 1, buffer, &stride, &offset);
 	}
 
 	void Buffer::SetIndexBuffer(ID3D11Buffer ** buffer)
@@ -40,21 +41,18 @@ namespace eva
 	}
 
 	void Buffer::CreateBuffer(const void * data, UINT size, UINT stride, 
-								ID3D11Buffer ** buffer, D3D11_BIND_FLAG bindFlag, D3D11_CPU_ACCESS_FLAG flag, D3D11_USAGE usage)
+							   ID3D11Buffer ** buffer, D3D11_BIND_FLAG bindFlag, D3D11_USAGE usage)
 	{
 		//Fill in buffer description for buffer
 		D3D11_BUFFER_DESC bufferDesc = { 0 };
 		bufferDesc.BindFlags = bindFlag;
 		bufferDesc.Usage = usage;
 		bufferDesc.ByteWidth = stride * size;
-		bufferDesc.CPUAccessFlags = flag;
+		bufferDesc.CPUAccessFlags = 0;
 
 		//Fill in subresource data
 		D3D11_SUBRESOURCE_DATA subData = { 0 };
 		subData.pSysMem = data;
-		subData.SysMemPitch = size;
-		subData.SysMemSlicePitch = subData.SysMemPitch;
-
 		assert(!m_device->CreateBuffer(&bufferDesc, &subData, buffer));
 	}
 }

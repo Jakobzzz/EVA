@@ -17,6 +17,7 @@ namespace eva
 {
 	class Shader;
 	class Buffer;
+	class Model;
 
 	class Application
 	{
@@ -42,6 +43,7 @@ namespace eva
 	private:
 		std::unique_ptr<Shader> m_shaders;
 		std::unique_ptr<Buffer> m_buffer;
+		std::unique_ptr<Model> m_model;
 
 	private:
 		WNDCLASSEX m_windowClass;

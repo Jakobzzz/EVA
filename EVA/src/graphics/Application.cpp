@@ -1,4 +1,5 @@
 #include <graphics/Application.hpp>
+#include <graphics/Model.hpp>
 #include <utils/D3DUtility.hpp>
 #include <utils/Shader.hpp>
 #include <utils/Buffer.hpp>
@@ -29,6 +30,7 @@ namespace eva
 	{
 		m_shaders = std::make_unique<Shader>(m_device.Get(), m_deviceContext.Get());
 		m_buffer = std::make_unique<Buffer>(m_device.Get(), m_deviceContext.Get());
+		m_model = std::make_unique<Model>(m_buffer.get(), m_shaders.get());
 	}
 
 	void Application::Initialize()
@@ -58,6 +60,8 @@ namespace eva
 		//Load resources
 		CreateObjects();
 		LoadShaders();
+
+		m_model->CreateBuffers();
 	}
 
 	void Application::Run()
@@ -91,6 +95,8 @@ namespace eva
 		//Rendering
 		ImGui::Render();
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+		//m_model->Draw(); //Need to add viewport apparently...
 
 		m_swapChain->Present(1, 0); //Present with vsync (60 Hz)
 	}
