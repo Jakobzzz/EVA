@@ -13,7 +13,7 @@
     <Filter Include="GUI\Imgui">
       <UniqueIdentifier>{f759aa3f-39bc-4cc4-9a00-25bfe25eb2b5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Application">
+    <Filter Include="Main">
       <UniqueIdentifier>{398b78a9-6129-4e08-90b4-cf4b8133ffe6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -31,11 +31,20 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp">
-      <Filter>Application</Filter>
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\Application.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\include\imgui_impl_dx11.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\D3DUtility.hpp">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\Application.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>

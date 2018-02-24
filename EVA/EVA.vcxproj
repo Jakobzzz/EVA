@@ -70,16 +70,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)/externals/imgui/include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)/externals/imgui/include;$(ProjectDir)/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)/externals/imgui/include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)/externals/imgui/include;$(ProjectDir)/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)/externals/imgui/include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)/externals/imgui/include;$(ProjectDir)/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)/externals/imgui/include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)/externals/imgui/include;$(ProjectDir)/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -142,10 +142,13 @@
     <ClCompile Include="externals\imgui\include\imgui_dock.cpp" />
     <ClCompile Include="externals\imgui\include\imgui_draw.cpp" />
     <ClCompile Include="externals\imgui\include\imgui_impl_dx11.cpp" />
+    <ClCompile Include="src\graphics\Application.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\include\imgui_impl_dx11.h" />
+    <ClInclude Include="src\graphics\Application.hpp" />
+    <ClInclude Include="src\utils\D3DUtility.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
