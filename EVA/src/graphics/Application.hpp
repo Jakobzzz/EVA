@@ -5,13 +5,9 @@
 #pragma once
 #include <wrl.h>
 #include <memory>
+#include <d3d11.h>
 
 using namespace Microsoft::WRL;
-
-struct ID3D11Device;
-struct ID3D11DeviceContext;
-struct IDXGISwapChain;
-struct ID3D11RenderTargetView;
 
 namespace eva
 {
@@ -33,6 +29,7 @@ namespace eva
 		void Update();
 		void UpdateEditor();
 		void Render(const FLOAT* color);
+		void CreateViewport();
 		void CreateObjects();
 		void CreateDeviceD3D(HWND hWnd);
 		void CreateRenderTarget();
@@ -46,6 +43,7 @@ namespace eva
 		std::unique_ptr<Model> m_model;
 
 	private:
+		D3D11_VIEWPORT m_mainViewport;
 		WNDCLASSEX m_windowClass;
 		ComPtr<ID3D11Device> m_device;
 		ComPtr<ID3D11DeviceContext> m_deviceContext;

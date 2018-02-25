@@ -38,10 +38,11 @@ namespace eva
 		//Create application window
 		m_windowClass = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("EVA"), NULL };
 		RegisterClassEx(&m_windowClass);
-		HWND hwnd = CreateWindow(_T("EVA"), _T("EVA engine - DirectX11.0"), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, m_windowClass.hInstance, NULL);
+		HWND hwnd = CreateWindow(_T("EVA"), _T("EVA engine - DirectX11.0"), WS_OVERLAPPEDWINDOW, 100, 100, WIDTH, HEIGHT, NULL, NULL, m_windowClass.hInstance, NULL);
 
 		//Initialize Direct3D
 		CreateDeviceD3D(hwnd);
+		CreateViewport();
 
 		//Show the window
 		ShowWindow(hwnd, SW_SHOWDEFAULT);
@@ -89,6 +90,7 @@ namespace eva
 
 	void Application::Render(const FLOAT* color)
 	{
+		m_deviceContext->RSSetViewports(1, &m_mainViewport);
 		m_deviceContext->OMSetRenderTargets(1, m_mainRenderTargetView.GetAddressOf(), NULL);
 		m_deviceContext->ClearRenderTargetView(m_mainRenderTargetView.Get(), color);
 
@@ -96,9 +98,9 @@ namespace eva
 		ImGui::Render();
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-		//m_model->Draw(); //Need to add viewport apparently...
+		m_model->Draw();
 
-		m_swapChain->Present(1, 0); //Present with vsync (60 Hz)
+		assert(!m_swapChain->Present(1, 0)); //Present with vsync (60 Hz)
 	}
 
 	void Application::ShutDown()
@@ -191,6 +193,16 @@ namespace eva
 				D3D11_SDK_VERSION, &sd, m_swapChain.GetAddressOf(), m_device.GetAddressOf(), &featureLevel, m_deviceContext.GetAddressOf()));
 
 		CreateRenderTarget();
+	}
+
+	void Application::CreateViewport()
+	{
+		m_mainViewport.Width = static_cast<FLOAT>(WIDTH);
+		m_mainViewport.Height = static_cast<FLOAT>(HEIGHT);
+		m_mainViewport.MinDepth = 0.0f;
+		m_mainViewport.MaxDepth = 1.0f;
+		m_mainViewport.TopLeftX = 0;
+		m_mainViewport.TopLeftY = 0;
 	}
 
 	LRESULT Application::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
