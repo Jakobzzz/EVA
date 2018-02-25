@@ -146,6 +146,7 @@
     <ClCompile Include="src\graphics\Model.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\utils\Buffer.cpp" />
+    <ClCompile Include="src\utils\RenderTexture.cpp" />
     <ClCompile Include="src\utils\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +154,7 @@
     <ClInclude Include="src\graphics\Model.hpp" />
     <ClInclude Include="src\utils\Buffer.hpp" />
     <ClInclude Include="src\utils\D3DUtility.hpp" />
+    <ClInclude Include="src\utils\RenderTexture.hpp" />
     <ClInclude Include="src\utils\Shader.hpp" />
   </ItemGroup>
   <ItemGroup>

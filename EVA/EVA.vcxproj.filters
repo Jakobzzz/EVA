@@ -48,6 +48,9 @@
     <ClCompile Include="src\graphics\Model.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils\RenderTexture.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils\D3DUtility.hpp">
@@ -63,6 +66,9 @@
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\Model.hpp">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\RenderTexture.hpp">
       <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
