@@ -1,7 +1,6 @@
 #include <utils/Shader.hpp>
 #include <utils/D3DUtility.hpp>
 #include <assert.h>
-#include <tchar.h>
 #include <d3dcompiler.h>
 
 namespace eva

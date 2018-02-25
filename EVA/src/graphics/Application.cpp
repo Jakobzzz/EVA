@@ -91,7 +91,7 @@ namespace eva
 	void Application::Render(const FLOAT* color)
 	{
 		m_deviceContext->RSSetViewports(1, &m_mainViewport);
-		m_deviceContext->OMSetRenderTargets(1, m_mainRenderTargetView.GetAddressOf(), NULL);
+		m_deviceContext->OMSetRenderTargets(1, m_mainRenderTargetView.GetAddressOf(), nullptr);
 		m_deviceContext->ClearRenderTargetView(m_mainRenderTargetView.Get(), color);
 
 		//Rendering
@@ -162,7 +162,7 @@ namespace eva
 	{
 		ID3D11Texture2D* pBackBuffer;
 		m_swapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
-		m_device->CreateRenderTargetView(pBackBuffer, NULL, m_mainRenderTargetView.GetAddressOf());
+		m_device->CreateRenderTargetView(pBackBuffer, nullptr, m_mainRenderTargetView.GetAddressOf());
 		SAFE_RELEASE(&pBackBuffer);
 	}
 
