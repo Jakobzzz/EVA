@@ -19,6 +19,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{99d4fb26-4cdd-4558-8ca8-9ff798385744}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility\Resources">
+      <UniqueIdentifier>{4be8be3f-1857-4e3c-a2bb-13ec817225a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\include\imgui_draw.cpp">
@@ -39,17 +42,17 @@
     <ClCompile Include="externals\imgui\include\imgui_impl_dx11.cpp">
       <Filter>GUI\Imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\utils\Shader.cpp">
-      <Filter>Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="src\utils\Buffer.cpp">
-      <Filter>Utility</Filter>
-    </ClCompile>
     <ClCompile Include="src\graphics\Model.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils\Buffer.cpp">
+      <Filter>Utility\Resources</Filter>
+    </ClCompile>
     <ClCompile Include="src\utils\RenderTexture.cpp">
-      <Filter>Utility</Filter>
+      <Filter>Utility\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\Shader.cpp">
+      <Filter>Utility\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,17 +62,17 @@
     <ClInclude Include="src\graphics\Application.hpp">
       <Filter>Editor</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils\Buffer.hpp">
-      <Filter>Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="src\utils\Shader.hpp">
-      <Filter>Utility</Filter>
-    </ClInclude>
     <ClInclude Include="src\graphics\Model.hpp">
       <Filter>Utility</Filter>
     </ClInclude>
+    <ClInclude Include="src\utils\Buffer.hpp">
+      <Filter>Utility\Resources</Filter>
+    </ClInclude>
     <ClInclude Include="src\utils\RenderTexture.hpp">
-      <Filter>Utility</Filter>
+      <Filter>Utility\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\Shader.hpp">
+      <Filter>Utility\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
