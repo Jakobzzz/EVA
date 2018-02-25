@@ -3,15 +3,20 @@
 
 namespace eva
 {
-	RenderTexture::RenderTexture(ID3D11Device * device, ID3D11DeviceContext * deviceContext, UINT width, UINT height) : m_device(device), m_deviceContext(deviceContext),
-																														m_width(width), m_height(height)
+	RenderTexture::RenderTexture(ID3D11Device * device, ID3D11DeviceContext * deviceContext) : m_device(device), m_deviceContext(deviceContext), 
+																							   m_width(0), m_height(0)
 	{
-		//CreateRenderTarget(width, height);
 	}
 
 	void RenderTexture::CreateRenderTarget(UINT width, UINT height)
 	{
-		//Reset the resources?
+		m_width = width;
+		m_height = height;
+
+		//Reset resources
+		m_renderTargetTexture.Reset();
+		m_renderTargetView.Reset();
+		m_shaderResourceView.Reset();
 
 		//Fill in the texture description
 		D3D11_TEXTURE2D_DESC textureDesc = { 0 };

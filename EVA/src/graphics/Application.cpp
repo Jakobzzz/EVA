@@ -3,6 +3,7 @@
 #include <utils/D3DUtility.hpp>
 #include <utils/Shader.hpp>
 #include <utils/Buffer.hpp>
+#include <utils/RenderTexture.hpp>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
 #include <imgui_dock.h>
@@ -30,6 +31,7 @@ namespace eva
 	{
 		m_shaders = std::make_unique<Shader>(m_device.Get(), m_deviceContext.Get());
 		m_buffer = std::make_unique<Buffer>(m_device.Get(), m_deviceContext.Get());
+		m_sceneTexture = std::make_unique<RenderTexture>(m_device.Get(), m_deviceContext.Get());
 		m_model = std::make_unique<Model>(m_buffer.get(), m_shaders.get());
 	}
 
@@ -42,7 +44,6 @@ namespace eva
 
 		//Initialize Direct3D
 		CreateDeviceD3D(hwnd);
-		CreateViewport();
 
 		//Show the window
 		ShowWindow(hwnd, SW_SHOWDEFAULT);
@@ -83,24 +84,25 @@ namespace eva
 			}
 
 			ImGui_ImplDX11_NewFrame();
-			//UpdateEditor();
-			Render(DirectX::Colors::Gray);
+			UpdateEditor();
+			RenderMainWindow();
 		}
 	}
 
-	void Application::Render(const FLOAT* color)
+	void Application::RenderMainWindow()
 	{
-		m_deviceContext->RSSetViewports(1, &m_mainViewport);
 		m_deviceContext->OMSetRenderTargets(1, m_mainRenderTargetView.GetAddressOf(), nullptr);
-		m_deviceContext->ClearRenderTargetView(m_mainRenderTargetView.Get(), color);
+		m_deviceContext->ClearRenderTargetView(m_mainRenderTargetView.Get(), DirectX::Colors::Black);
 
-		//Rendering
 		ImGui::Render();
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-		m_model->Draw();
-
 		assert(!m_swapChain->Present(1, 0)); //Present with vsync (60 Hz)
+	}
+
+	void Application::RenderScene()
+	{
+		m_sceneTexture->SetRenderTarget(DirectX::Colors::Gray);
+		m_model->Draw();
 	}
 
 	void Application::ShutDown()
@@ -133,22 +135,26 @@ namespace eva
 			//check the imgui.ini file and remove/rename entry
 			ImGui::BeginDockspace();
 
-			if (ImGui::BeginDock("Scene")) {
-				ImGui::Text("I'm Wubugui!");
+			if (ImGui::BeginDock("Scene")) 
+			{
+				CreateSceneDock();
 			}
 			ImGui::EndDock();
 
-			if (ImGui::BeginDock("Inspector")) {
+			if (ImGui::BeginDock("Inspector")) 
+			{
 				ImGui::Text("I'm BentleyBlanks!");
 			}
 			ImGui::EndDock();
 
-			if (ImGui::BeginDock("Log")) {
+			if (ImGui::BeginDock("Log")) 
+			{
 				ImGui::Text("I'm LonelyWaiting!");
 			}
 			ImGui::EndDock();
 
-			if (ImGui::BeginDock("Test")) {
+			if (ImGui::BeginDock("Test")) 
+			{
 				ImGui::Text("I'm LonelyWaiting!");
 			}
 			ImGui::EndDock();
@@ -156,6 +162,22 @@ namespace eva
 			ImGui::EndDockspace();
 		}
 		ImGui::End();
+	}
+
+	void Application::CreateSceneDock()
+	{
+		//m_isSceneHovered = ImGui::IsItemHovered();
+		ImVec2 size = ImGui::GetContentRegionAvail();
+		UINT width = m_sceneTexture->GetWidth();
+		UINT height = m_sceneTexture->GetHeight();
+
+		//Resize the render texture
+		//Note: resizing the scene during runtime (very) frequently will likely cause a crash due to memory allocations
+		if (width != size.x || height != size.y)
+			m_sceneTexture->CreateRenderTarget(static_cast<UINT>(size.x), static_cast<UINT>(size.y));
+
+		RenderScene();
+		ImGui::Image(m_sceneTexture->GetShaderResourceView(), size);
 	}
 
 	void Application::CreateRenderTarget()
@@ -193,16 +215,6 @@ namespace eva
 				D3D11_SDK_VERSION, &sd, m_swapChain.GetAddressOf(), m_device.GetAddressOf(), &featureLevel, m_deviceContext.GetAddressOf()));
 
 		CreateRenderTarget();
-	}
-
-	void Application::CreateViewport()
-	{
-		m_mainViewport.Width = static_cast<FLOAT>(WIDTH);
-		m_mainViewport.Height = static_cast<FLOAT>(HEIGHT);
-		m_mainViewport.MinDepth = 0.0f;
-		m_mainViewport.MaxDepth = 1.0f;
-		m_mainViewport.TopLeftX = 0;
-		m_mainViewport.TopLeftY = 0;
 	}
 
 	LRESULT Application::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)

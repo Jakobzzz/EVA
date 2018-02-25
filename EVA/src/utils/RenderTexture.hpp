@@ -14,7 +14,7 @@ namespace eva
 	{
 	public:
 		RenderTexture() = default;
-		RenderTexture(ID3D11Device* device, ID3D11DeviceContext* deviceContext, UINT width, UINT height);
+		RenderTexture(ID3D11Device* device, ID3D11DeviceContext* deviceContext);
 		~RenderTexture() = default;
 		void CreateRenderTarget(UINT width, UINT height);
 		void SetRenderTarget(const FLOAT * color);
