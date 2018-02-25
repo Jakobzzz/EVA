@@ -16,6 +16,11 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 
 namespace eva
 {
+	ComPtr<ID3D11Device> Application::m_device;
+	ComPtr<ID3D11DeviceContext> Application::m_deviceContext;
+	ComPtr<IDXGISwapChain> Application::m_swapChain;
+	ComPtr<ID3D11RenderTargetView> Application::m_mainRenderTargetView;
+
 	Application::Application()
 	{
 	}
@@ -224,6 +229,16 @@ namespace eva
 
 		switch (msg)
 		{
+		case WM_SIZE:
+			if (m_device.Get() != nullptr && wParam != SIZE_MINIMIZED)
+			{
+				ImGui_ImplDX11_InvalidateDeviceObjects();
+				m_mainRenderTargetView.Reset();
+				m_swapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
+				CreateRenderTarget();
+				ImGui_ImplDX11_CreateDeviceObjects();
+			}
+			return 0;
 		case WM_SYSCOMMAND:
 			if ((wParam & 0xfff0) == SC_KEYMENU) //Disable ALT application menu
 				return 0;
