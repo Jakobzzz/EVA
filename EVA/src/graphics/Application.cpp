@@ -45,7 +45,7 @@ namespace eva
 		//Create application window
 		m_windowClass = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("EVA"), NULL };
 		RegisterClassEx(&m_windowClass);
-		HWND hwnd = CreateWindow(_T("EVA"), _T("EVA engine - DirectX11.0"), WS_OVERLAPPEDWINDOW, 100, 100, WIDTH, HEIGHT, NULL, NULL, m_windowClass.hInstance, NULL);
+		HWND hwnd = CreateWindow(_T("EVA"), _T("EVA engine - DirectX11.0"), WS_OVERLAPPEDWINDOW, 150, 75, WIDTH, HEIGHT, NULL, NULL, m_windowClass.hInstance, NULL);
 
 		//Initialize Direct3D
 		CreateDeviceD3D(hwnd);
@@ -124,6 +124,37 @@ namespace eva
 
 	void Application::UpdateEditor()
 	{
+		//Menu bar
+		if (ImGui::BeginMainMenuBar())
+		{
+			if (ImGui::BeginMenu("File"))
+			{
+				if (ImGui::MenuItem("New"))
+				{
+
+				}
+
+				if (ImGui::MenuItem("Open"))
+				{
+
+				}
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Edit"))
+			{
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Options"))
+			{
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMainMenuBar();
+		}
+
 		//Begin docking
 		ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
 		const ImGuiWindowFlags flags = (ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |
