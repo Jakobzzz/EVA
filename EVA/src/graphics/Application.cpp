@@ -127,18 +127,9 @@ namespace eva
 		//Menu bar
 		if (ImGui::BeginMainMenuBar())
 		{
+			//Menu options
 			if (ImGui::BeginMenu("File"))
 			{
-				if (ImGui::MenuItem("New"))
-				{
-
-				}
-
-				if (ImGui::MenuItem("Open"))
-				{
-
-				}
-
 				ImGui::EndMenu();
 			}
 
@@ -147,7 +138,17 @@ namespace eva
 				ImGui::EndMenu();
 			}
 
-			if (ImGui::BeginMenu("Options"))
+			if (ImGui::BeginMenu("Assets"))
+			{
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Window"))
+			{
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Help"))
 			{
 				ImGui::EndMenu();
 			}
@@ -163,7 +164,7 @@ namespace eva
 		const float oldWindowRounding = ImGui::GetStyle().WindowRounding; ImGui::GetStyle().WindowRounding = 0;
 		const bool visible = ImGui::Begin("Docking system", nullptr, ImVec2(0, 0), 1.0f, flags);
 		ImGui::GetStyle().WindowRounding = oldWindowRounding;
-		ImGui::SetWindowPos(ImVec2(0, 10));
+		ImGui::SetWindowPos(ImVec2(0, 50));
 
 		if (visible)
 		{
@@ -179,19 +180,21 @@ namespace eva
 
 			if (ImGui::BeginDock("Inspector")) 
 			{
-				ImGui::Text("I'm BentleyBlanks!");
+			}
+			ImGui::EndDock();
+
+			if (ImGui::BeginDock("Hierarchy"))
+			{
 			}
 			ImGui::EndDock();
 
 			if (ImGui::BeginDock("Log")) 
 			{
-				ImGui::Text("I'm LonelyWaiting!");
 			}
 			ImGui::EndDock();
 
-			if (ImGui::BeginDock("Test")) 
+			if (ImGui::BeginDock("Project")) 
 			{
-				ImGui::Text("I'm LonelyWaiting!");
 			}
 			ImGui::EndDock();
 
