@@ -16,7 +16,7 @@ namespace eva
 		RenderTexture() = default;
 		RenderTexture(ID3D11Device* device, ID3D11DeviceContext* deviceContext);
 		~RenderTexture() = default;
-		void CreateRenderTarget(UINT width, UINT height);
+		void CreateRenderTarget(UINT width, UINT height, bool multiSampling = false);
 		void SetRenderTarget(const FLOAT * color);
 
 	public:
@@ -41,5 +41,6 @@ namespace eva
 		D3D11_VIEWPORT m_vp;
 		ID3D11Device* m_device;
 		ID3D11DeviceContext* m_deviceContext;
+		bool m_multiSampling;
 	};
 }

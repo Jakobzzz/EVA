@@ -245,7 +245,6 @@ namespace eva
 	{
 		//Setup swap chain
 		DXGI_SWAP_CHAIN_DESC sd = { 0 };
-		ZeroMemory(&sd, sizeof(sd));
 		sd.BufferCount = 2;
 		sd.BufferDesc.Width = 0;
 		sd.BufferDesc.Height = 0;
