@@ -21,13 +21,7 @@ namespace eva
 		};
 	}
 
-	enum ShaderType
-	{
-		VS = 0,
-		PS = 0x1
-	};
-
-	DEFINE_ENUM_FLAG_OPERATORS(ShaderType);
+	enum ShaderType;
 
 	enum Topology
 	{

@@ -1,5 +1,6 @@
 #include <utils/Buffer.hpp>
 #include <assert.h>
+#include <utils/D3DUtility.hpp>
 
 namespace eva
 {
@@ -19,6 +20,12 @@ namespace eva
 		CreateBuffer(data, size, stride, buffer, D3D11_BIND_INDEX_BUFFER, flag, usage);
 	}
 
+	void Buffer::CreateConstantBuffer(const void * data, UINT size, UINT stride, 
+									  ID3D11Buffer ** buffer, D3D11_CPU_ACCESS_FLAG flag, D3D11_USAGE usage)
+	{
+		CreateBuffer(data, size, stride, buffer, D3D11_BIND_CONSTANT_BUFFER, flag, usage);
+	}
+
 	void Buffer::SetVertexBuffer(ID3D11Buffer ** buffer, UINT stride)
 	{
 		UINT offset = 0;
@@ -30,6 +37,15 @@ namespace eva
 		m_deviceContext->IASetIndexBuffer(buffer[0], DXGI_FORMAT_R32_UINT, 0);
 	}
 
+	void Buffer::SetConstantBuffer(UINT shaderRegister, ID3D11Buffer ** buffer, ShaderType type)
+	{
+		//Note: Bit flag might change this up a bit
+		if(type == VS)
+			m_deviceContext->VSSetConstantBuffers(shaderRegister, 1, buffer);
+		else if (type == PS)
+			m_deviceContext->PSSetConstantBuffers(shaderRegister, 1, buffer);
+	}
+
 	void Buffer::Draw(UINT vertexCount)
 	{
 		m_deviceContext->Draw(vertexCount, 0);
@@ -38,6 +54,11 @@ namespace eva
 	void Buffer::DrawIndexed(UINT indexCount)
 	{
 		m_deviceContext->DrawIndexed(indexCount, 0, 0);
+	}
+
+	void Buffer::UpdateConstantBuffer(const void * data, ID3D11Buffer ** buffer)
+	{
+		m_deviceContext->UpdateSubresource(buffer[0], 0, nullptr, data, 0, 0);
 	}
 
 	void Buffer::CreateBuffer(const void * data, UINT size, UINT stride, 
