@@ -58,5 +58,8 @@ namespace eva
 		static ComPtr<ID3D11DeviceContext> m_deviceContext;
 		static ComPtr<IDXGISwapChain> m_swapChain;
 		static ComPtr<ID3D11RenderTargetView> m_mainRenderTargetView;
+
+	private:
+		static bool m_isSceneHovered;
 	};
 }

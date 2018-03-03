@@ -18,6 +18,7 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 
 namespace eva
 {
+	bool Application::m_isSceneHovered = false;
 	ComPtr<ID3D11Device> Application::m_device;
 	ComPtr<ID3D11DeviceContext> Application::m_deviceContext;
 	ComPtr<IDXGISwapChain> Application::m_swapChain;
@@ -94,7 +95,7 @@ namespace eva
 
 			Input::Update();
 			PollEvents();
-			m_camera->Update(1 / 60.f); //60 FPS/second timestep
+			m_camera->Update(1 / 60.f, m_isSceneHovered); //60 FPS/second timestep
 			ImGui_ImplDX11_NewFrame();
 			UpdateEditor();
 			RenderMainWindow();
@@ -218,7 +219,7 @@ namespace eva
 
 	void Application::CreateSceneDock()
 	{
-		//m_isSceneHovered = ImGui::IsItemHovered();
+		m_isSceneHovered = ImGui::IsWindowHovered();
 		ImVec2 size = ImGui::GetContentRegionAvail();
 		UINT width = m_sceneTexture->GetWidth();
 		UINT height = m_sceneTexture->GetHeight();

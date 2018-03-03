@@ -13,14 +13,15 @@ namespace eva
 	{
 	}
 
-	void Camera::Update(float dt)
+	void Camera::Update(float dt, bool isHovered)
 	{
-		MoveCamera(dt);
+		MoveCamera(dt, isHovered);
 		RotateCamera();
 	}
 
-	void Camera::MoveCamera(float dt)
+	void Camera::MoveCamera(float dt, bool isHovered)
 	{
+		Input::ResetScrollWheelValue();
 		float velocity = m_movementSpeed * dt;
 
 		//Move camera
@@ -33,17 +34,14 @@ namespace eva
 		if (Input::GetKey(Keyboard::Keys::A))
 			m_cameraPos -= XMVector3Normalize(XMVector3Cross(m_camUp, m_camTarget)) * velocity;
 
-		//Zoom functionality which adjusts the camera position instead of fov angle
-		if (Input::GetMouseScrollWheel() > 0)
+		//Adjust camera position depending on mouse scroll
+		if (isHovered)
 		{
-			m_cameraPos += m_camTarget * 5.f;
-			Input::ResetScrollWheelValue();
-		}
+			if (Input::GetMouseScrollWheel() > 0)
+				m_cameraPos += m_camTarget * 5.f;
 
-		if (Input::GetMouseScrollWheel() < 0)
-		{
-			m_cameraPos -= m_camTarget * 5.f;
-			Input::ResetScrollWheelValue();
+			if (Input::GetMouseScrollWheel() < 0)
+				m_cameraPos -= m_camTarget * 5.f;
 		}
 	}
 
