@@ -19,6 +19,7 @@ namespace eva
 	class Buffer;
 	class Model;
 	class RenderTexture;
+	class Camera;
 
 	class Application
 	{
@@ -48,6 +49,7 @@ namespace eva
 		std::unique_ptr<Shader> m_shaders;
 		std::unique_ptr<Buffer> m_buffer;
 		std::unique_ptr<Model> m_model;
+		std::unique_ptr<Camera> m_camera;
 		std::unique_ptr<RenderTexture> m_sceneTexture;
 
 	private:

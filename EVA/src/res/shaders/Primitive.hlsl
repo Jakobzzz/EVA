@@ -12,11 +12,16 @@ struct VS_OUT
     float4 position : SV_Position;
 };
 
+cbuffer cbData : register(b0)
+{
+    float4x4 WVP;
+}
+
 VS_OUT VS_MAIN(VS_IN input)
 {
     VS_OUT output;
 
-    output.position = input.position;
+    output.position = mul(input.position, WVP);
     return output;
 }
 

@@ -1,3 +1,7 @@
+/*
+	Input wrapper for keyboard and mouse support
+*/
+
 #pragma once
 #include <Keyboard.h>
 #include <Mouse.h>

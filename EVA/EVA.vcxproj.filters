@@ -60,6 +60,9 @@
     <ClCompile Include="src\utils\Input.cpp">
       <Filter>Utility\Input</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils\Camera.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils\D3DUtility.hpp">
@@ -82,6 +85,9 @@
     </ClInclude>
     <ClInclude Include="src\utils\Input.hpp">
       <Filter>Utility\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\Camera.hpp">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
