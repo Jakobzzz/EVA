@@ -18,8 +18,8 @@ namespace eva
 		if (data.type == (VS | PS))
 		{
 			data.blobs.resize(2);
-			assert(!D3DCompileFromFile(ToWChar(shaderPath).c_str(), nullptr, nullptr, "VS_MAIN", "vs_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, data.blobs[0].GetAddressOf(), nullptr));
-			assert(!D3DCompileFromFile(ToWChar(shaderPath).c_str(), nullptr, nullptr, "PS_MAIN", "ps_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, data.blobs[1].GetAddressOf(), nullptr));	
+			assert(!D3DCompileFromFile(ToWChar(shaderPath).c_str(), nullptr, nullptr, "VS_MAIN", "vs_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR, 0, data.blobs[0].GetAddressOf(), nullptr));
+			assert(!D3DCompileFromFile(ToWChar(shaderPath).c_str(), nullptr, nullptr, "PS_MAIN", "ps_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR, 0, data.blobs[1].GetAddressOf(), nullptr));
 			assert(!m_device->CreateVertexShader(data.blobs[0]->GetBufferPointer(), data.blobs[0]->GetBufferSize(), nullptr, data.vertexShader.GetAddressOf()));
 			assert(!m_device->CreatePixelShader(data.blobs[1]->GetBufferPointer(), data.blobs[1]->GetBufferSize(), nullptr, data.pixelShader.GetAddressOf()));
 		}

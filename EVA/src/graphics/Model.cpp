@@ -1,22 +1,22 @@
 #include <graphics/Model.hpp>
 #include <utils/Buffer.hpp>
 #include <utils/Shader.hpp>
-#include <DirectXMath.h>
+#include <SimpleMath.h>
 
-using namespace DirectX;
+using namespace DirectX::SimpleMath;
 
 namespace eva
 {
 	struct Vertex
 	{
-		XMFLOAT4 position;
+		Vector4 position;
 	};
 
 	Vertex vertices[] =
 	{
-		XMFLOAT4(0.0f, 0.5f, 0.5f, 1.f),
-		XMFLOAT4(0.5f, -0.5f, 0.5f, 1.f),
-		XMFLOAT4(-0.5f, -0.5f, 0.5f, 1.f)
+		Vector4(0.0f, 0.5f, 0.5f, 1.f),
+		Vector4(0.5f, -0.5f, 0.5f, 1.f),
+		Vector4(-0.5f, -0.5f, 0.5f, 1.f)
 	};
 
 	Model::Model(Buffer * buffer, Shader * shader) : m_buffer(buffer), m_shader(shader)
