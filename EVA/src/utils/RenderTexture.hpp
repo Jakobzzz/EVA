@@ -23,14 +23,18 @@ namespace eva
 		ID3D11ShaderResourceView* GetShaderResourceView() const;
 		UINT GetWidth() const;
 		UINT GetHeight() const;
-
+		
 	private:
+		void CreateRenderTargetView();
+		void CreateDepthStencilView();
 		void CreateViewport();
 
 	private:
 		ComPtr<ID3D11Texture2D> m_renderTargetTexture;
+		ComPtr<ID3D11Texture2D> m_depthStencilTexture;
 		ComPtr<ID3D11RenderTargetView> m_renderTargetView;
 		ComPtr<ID3D11ShaderResourceView> m_shaderResourceView;
+		ComPtr<ID3D11DepthStencilView> m_depthStencilView;
 
 	private:
 		UINT m_width, m_height;

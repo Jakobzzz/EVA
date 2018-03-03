@@ -26,14 +26,14 @@ namespace eva
 	void Model::CreateBuffers()
 	{
 		m_buffer->CreateVertexBuffer(vertices, ARRAYSIZE(vertices), sizeof(Vertex), m_vertexBuffer.GetAddressOf(), (D3D11_CPU_ACCESS_FLAG)0);
-		m_shader->CreateInputLayout(Shaders::Basic);
+		m_shader->CreateInputLayout(Shaders::BASIC);
 	}
 
 	void Model::Draw()
 	{
-		m_shader->SetShaders(Shaders::Basic, TRIANGLES);
+		m_shader->SetShaders(Shaders::BASIC, TRIANGLES);
 		m_buffer->SetVertexBuffer(m_vertexBuffer.GetAddressOf(), sizeof(Vertex));
 		m_buffer->Draw(ARRAYSIZE(vertices));
-		m_shader->Unbind(Shaders::Basic);
+		m_shader->Unbind(Shaders::BASIC);
 	}
 }

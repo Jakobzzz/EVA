@@ -17,7 +17,7 @@ namespace eva
 	{
 		enum ID
 		{
-			Basic
+			BASIC
 		};
 	}
 

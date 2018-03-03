@@ -29,7 +29,7 @@ namespace eva
 
 	void Application::LoadShaders()
 	{
-		m_shaders->LoadShadersFromFile(Shaders::Basic, "src/res/shaders/Primitive.hlsl", VS | PS);
+		m_shaders->LoadShadersFromFile(Shaders::BASIC, "src/res/shaders/Primitive.hlsl", VS | PS);
 	}
 
 	void Application::CreateObjects()

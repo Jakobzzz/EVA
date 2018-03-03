@@ -35,7 +35,7 @@ namespace eva
 		//Hardcoded layout for now
 		std::vector<D3D11_INPUT_ELEMENT_DESC> inputElementDesc;
 
-		if (id == Shaders::ID::Basic)
+		if (id == Shaders::ID::BASIC)
 		{
 			inputElementDesc =
 			{
