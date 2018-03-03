@@ -32,6 +32,7 @@ namespace eva
 	private:
 		void LoadShaders();
 		void Update();
+		void PollEvents();
 		void UpdateEditor();
 		void RenderMainWindow();
 		void RenderScene();

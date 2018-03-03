@@ -4,6 +4,7 @@
 #include <utils/Shader.hpp>
 #include <utils/Buffer.hpp>
 #include <utils/RenderTexture.hpp>
+#include <utils/Input.hpp>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
 #include <imgui_dock.h>
@@ -53,12 +54,13 @@ namespace eva
 		//Show the window
 		ShowWindow(hwnd, SW_SHOWDEFAULT);
 		UpdateWindow(hwnd);
+		Input::Initialize(hwnd);
 
 		//Setup ImGui binding
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		ImGui_ImplDX11_Init(hwnd, m_device.Get(), m_deviceContext.Get());
-		//io.NavFlags |= ImGuiNavFlags_EnableKeyboard;  //Enable Keyboard Controls
+		io.NavFlags |= ImGuiNavFlags_EnableKeyboard;
 
 		//Setup style and reload saved dock settings
 		ImGui::StyleColorsDark();
@@ -88,10 +90,18 @@ namespace eva
 				continue;
 			}
 
+			Input::Update();
+			PollEvents();
 			ImGui_ImplDX11_NewFrame();
 			UpdateEditor();
 			RenderMainWindow();
 		}
+	}
+
+	void Application::PollEvents()
+	{
+		if (Input::GetKeyDown(Keyboard::Keys::Escape)) //Note: This is not entirely thread safe when handling quit messages
+			PostQuitMessage(0);
 	}
 
 	void Application::RenderMainWindow()
@@ -263,6 +273,30 @@ namespace eva
 
 		switch (msg)
 		{
+		case WM_ACTIVATEAPP:
+			Keyboard::ProcessMessage(msg, wParam, lParam);
+			Mouse::ProcessMessage(msg, wParam, lParam);
+			break;
+		case WM_INPUT:
+		case WM_MOUSEMOVE:
+		case WM_LBUTTONDOWN:
+		case WM_LBUTTONUP:
+		case WM_RBUTTONDOWN:
+		case WM_RBUTTONUP:
+		case WM_MBUTTONDOWN:
+		case WM_MBUTTONUP:
+		case WM_MOUSEWHEEL:
+		case WM_XBUTTONDOWN:
+		case WM_XBUTTONUP:
+		case WM_MOUSEHOVER:
+			Mouse::ProcessMessage(msg, wParam, lParam);
+			break;
+		case WM_KEYDOWN:
+		case WM_SYSKEYDOWN:
+		case WM_KEYUP:
+		case WM_SYSKEYUP:
+			Keyboard::ProcessMessage(msg, wParam, lParam);
+			break;
 		case WM_SIZE:
 			if (m_device.Get() != nullptr && wParam != SIZE_MINIMIZED)
 			{
