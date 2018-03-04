@@ -29,7 +29,7 @@ namespace eva
 
 	private:
 		void MoveCamera(float dt, bool isHovered);
-		void RotateCamera();
+		void RotateCamera(bool isHovered);
 
 	private:
 		Vector3 m_cameraPos;
@@ -39,6 +39,8 @@ namespace eva
 		Matrix m_viewMatrix;
 
 	private:
+		Vector2 m_currentMousePos;
+		Vector2 m_lastMousePos;
 		float m_camYaw;
 		float m_camPitch;
 		float m_movementSpeed;

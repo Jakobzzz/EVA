@@ -11,12 +11,14 @@ namespace eva
 				   m_cameraPos(camPosition), m_camTarget(camTarget), m_camUp(camUp), m_movementSpeed(speed), m_mouseSensivity(sensitivity),
 				   m_camYaw(0.f), m_camPitch(0.f), m_fov(45.0f)
 	{
+		m_currentMousePos = Vector2(static_cast<float>(Input::GetMousePositionX()), static_cast<float>(Input::GetMousePositionY()));
+		m_lastMousePos = m_currentMousePos;
 	}
 
 	void Camera::Update(float dt, bool isHovered)
 	{
 		MoveCamera(dt, isHovered);
-		RotateCamera();
+		RotateCamera(isHovered);
 	}
 
 	void Camera::MoveCamera(float dt, bool isHovered)
@@ -45,26 +47,27 @@ namespace eva
 		}
 	}
 
-	void Camera::RotateCamera()
+	void Camera::RotateCamera(bool isHovered)
 	{
+		//This doesn't work as intended as we are not using mouse coordinates which are local to the render texture!
+		m_lastMousePos = m_currentMousePos;
+		m_currentMousePos = Vector2(static_cast<float>(Input::GetMousePositionX()), static_cast<float>(Input::GetMousePositionY()));
+
 		//Rotate camera on mouse press
-		//if (Input::GetMouseButtonDown(Input::MouseButton::RIGHT))
-		//{
-		//	float currMousePosX = static_cast<float>(Input::GetMousePositionX());
-		//	float currMousePosY = static_cast<float>(Input::GetMousePositionY());
+		if (Input::GetMouseButton(Input::MouseButton::RIGHT) && isHovered)
+		{
+			//Calculate delta
+			Vector2 mouseDelta = (m_currentMousePos - m_lastMousePos) * m_mouseSensivity;
+			m_camYaw += mouseDelta.x;
+			m_camPitch += mouseDelta.y;
 
-		//	//As we use relative mouse-coordinates delta is already calculated
-		//	Vector2 mouseDelta = Vector2(currMousePosX, currMousePosY) * m_mouseSensivity;
-		//	m_camYaw += mouseDelta.x;
-		//	m_camPitch += mouseDelta.y;
+			//Restrict pitch angle
+			if (m_camPitch > 89.0f)
+				m_camPitch = 89.0f;
 
-		//	//Restrict pitch angle
-		//	if (m_camPitch > 89.0f)
-		//		m_camPitch = 89.0f;
-
-		//	if (m_camPitch < -89.0f)
-		//		m_camPitch = -89.0f;
-		//}
+			if (m_camPitch < -89.0f)
+				m_camPitch = -89.0f;
+		}
 
 		//Calculate target vector with Euler angles
 		m_rotationMatrix = XMMatrixRotationRollPitchYaw(XMConvertToRadians(m_camPitch), XMConvertToRadians(m_camYaw), 0.f);
