@@ -188,6 +188,20 @@ namespace eva
 
 			if (ImGui::BeginDock("Scene")) 
 			{
+				//printf("%f\n", ImGui::GetWindowPos().x);
+				//Is there a general way to find the offset for the dock for the mouse position?
+				/*ImVec2 size = ImGui::GetContentRegionAvail();
+				ImGui::SetNextWindowPos(ImVec2(size.x - 300, size.y));
+				if (!ImGui::Begin("FPS overlay", nullptr, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
+					ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
+				{
+					ImGui::End();
+					return;
+				}
+
+				ImGui::TextColored(ImVec4(0.f, 1.0f, 0.0f, 1.0f), "Mouse position: (%d, %d)", Input::GetMousePositionX() - 16, Input::GetMousePositionY() - 88);
+				ImGui::End();*/
+
 				CreateSceneDock();
 			}
 			ImGui::EndDock();

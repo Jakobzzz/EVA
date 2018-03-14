@@ -11,7 +11,7 @@ namespace eva
 				   m_cameraPos(camPosition), m_camTarget(camTarget), m_camUp(camUp), m_movementSpeed(speed), m_mouseSensivity(sensitivity),
 				   m_camYaw(0.f), m_camPitch(0.f), m_fov(45.0f)
 	{
-		m_currentMousePos = Vector2(static_cast<float>(Input::GetMousePositionX()), static_cast<float>(Input::GetMousePositionY()));
+		m_currentMousePos = Vector2(static_cast<float>(Input::GetMousePositionX() - 16), static_cast<float>(Input::GetMousePositionY() - 88));
 		m_lastMousePos = m_currentMousePos;
 	}
 
@@ -23,6 +23,7 @@ namespace eva
 
 	void Camera::MoveCamera(float dt, bool isHovered)
 	{
+		//TODO: Add strafing instead
 		Input::ResetScrollWheelValue();
 		float velocity = m_movementSpeed * dt;
 
@@ -51,7 +52,7 @@ namespace eva
 	{
 		//This doesn't work as intended as we are not using mouse coordinates which are local to the render texture!
 		m_lastMousePos = m_currentMousePos;
-		m_currentMousePos = Vector2(static_cast<float>(Input::GetMousePositionX()), static_cast<float>(Input::GetMousePositionY()));
+		m_currentMousePos = Vector2(static_cast<float>(Input::GetMousePositionX() - 16), static_cast<float>(Input::GetMousePositionY() - 88));
 
 		//Rotate camera on mouse press
 		if (Input::GetMouseButton(Input::MouseButton::RIGHT) && isHovered)
