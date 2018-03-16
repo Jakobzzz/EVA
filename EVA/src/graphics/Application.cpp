@@ -33,6 +33,7 @@ namespace eva
 	void Application::LoadShaders()
 	{
 		m_shaders->LoadShadersFromFile(Shaders::BASIC, "src/res/shaders/Primitive.hlsl", VS | PS);
+		m_shaders->CreateInputLayout(Shaders::BASIC);
 	}
 
 	void Application::CreateObjects()
