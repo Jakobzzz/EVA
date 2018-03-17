@@ -33,9 +33,6 @@
     <ClCompile Include="externals\imgui\include\imgui.cpp">
       <Filter>GUI\Imgui</Filter>
     </ClCompile>
-    <ClCompile Include="externals\imgui\include\imgui_dock.cpp">
-      <Filter>GUI\Imgui</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>Main</Filter>
     </ClCompile>

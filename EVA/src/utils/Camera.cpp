@@ -15,13 +15,13 @@ namespace eva
 		m_lastMousePos = m_currentMousePos;
 	}
 
-	void Camera::Update(float dt, bool isHovered)
+	void Camera::Update(float dt)
 	{
-		MoveCamera(dt, isHovered);
-		RotateCamera(isHovered);
+		MoveCamera(dt);
+		RotateCamera();
 	}
 
-	void Camera::MoveCamera(float dt, bool isHovered)
+	void Camera::MoveCamera(float dt)
 	{
 		//TODO: Add strafing instead
 		Input::ResetScrollWheelValue();
@@ -38,24 +38,21 @@ namespace eva
 			m_cameraPos -= XMVector3Normalize(XMVector3Cross(m_camUp, m_camTarget)) * velocity;
 
 		//Adjust camera position depending on mouse scroll
-		if (isHovered)
-		{
-			if (Input::GetMouseScrollWheel() > 0)
-				m_cameraPos += m_camTarget * 5.f;
+		if (Input::GetMouseScrollWheel() > 0)
+			m_cameraPos += m_camTarget * 5.f;
 
-			if (Input::GetMouseScrollWheel() < 0)
-				m_cameraPos -= m_camTarget * 5.f;
-		}
+		if (Input::GetMouseScrollWheel() < 0)
+			m_cameraPos -= m_camTarget * 5.f;
 	}
 
-	void Camera::RotateCamera(bool isHovered)
+	void Camera::RotateCamera()
 	{
 		//This doesn't work as intended as we are not using mouse coordinates which are local to the render texture!
 		m_lastMousePos = m_currentMousePos;
-		m_currentMousePos = Vector2(static_cast<float>(Input::GetMousePositionX() - 16), static_cast<float>(Input::GetMousePositionY() - 88));
+		m_currentMousePos = Vector2(static_cast<float>(Input::GetMousePositionX()), static_cast<float>(Input::GetMousePositionY()));
 
 		//Rotate camera on mouse press
-		if (Input::GetMouseButton(Input::MouseButton::RIGHT) && isHovered)
+		if (Input::GetMouseButton(Input::MouseButton::RIGHT))
 		{
 			//Calculate delta
 			Vector2 mouseDelta = (m_currentMousePos - m_lastMousePos) * m_mouseSensivity;

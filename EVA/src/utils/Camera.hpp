@@ -12,9 +12,9 @@ namespace eva
 	public:
 		Camera();
 		Camera(const Vector3 & camPosition = Vector3(0.0f, 0.0f, -2.0f), const Vector3 & camTarget = Vector3(0.0f, 0.0f, -1.f),
-			   const Vector3 & camUp = Vector3(0.0f, 1.0f, 0.0f), float speed = 10.0f, float sensitivity = 0.3f);
+			   const Vector3 & camUp = Vector3(0.0f, 1.0f, 0.0f), float speed = 100.0f, float sensitivity = 0.3f);
 		~Camera() = default;
-		void Update(float dt, bool isHovered);
+		void Update(float dt);
 
 	public:
 		void SetPosition(const Vector3 & position);
@@ -28,8 +28,8 @@ namespace eva
 		float GetFOV() const;
 
 	private:
-		void MoveCamera(float dt, bool isHovered);
-		void RotateCamera(bool isHovered);
+		void MoveCamera(float dt);
+		void RotateCamera();
 
 	private:
 		Vector3 m_cameraPos;

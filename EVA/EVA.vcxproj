@@ -143,7 +143,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\include\imgui.cpp" />
-    <ClCompile Include="externals\imgui\include\imgui_dock.cpp" />
     <ClCompile Include="externals\imgui\include\imgui_draw.cpp" />
     <ClCompile Include="externals\imgui\include\imgui_impl_dx11.cpp" />
     <ClCompile Include="src\graphics\Application.cpp" />

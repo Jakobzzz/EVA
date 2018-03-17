@@ -10,7 +10,7 @@ namespace eva
 {
 	//Release COM-object
 	#define SAFE_RELEASE(arg) if(*arg != nullptr) { (*arg)->Release(); (*arg) = nullptr; } 
-	#define WIDTH 1400
+	#define WIDTH 1200
 	#define HEIGHT 900
 
 	enum ShaderType

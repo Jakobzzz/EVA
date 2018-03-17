@@ -8,7 +8,7 @@ namespace eva
 	{
 	}
 
-	void RenderTexture::CreateRenderTarget(UINT width, UINT height, bool multiSampling)
+	void RenderTexture::CreateRenderTargetAndDepthStencil(UINT width, UINT height, bool multiSampling)
 	{
 		m_width = width;
 		m_height = height;

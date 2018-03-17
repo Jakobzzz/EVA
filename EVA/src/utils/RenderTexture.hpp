@@ -16,7 +16,7 @@ namespace eva
 		RenderTexture() = default;
 		RenderTexture(ID3D11Device* device, ID3D11DeviceContext* deviceContext);
 		~RenderTexture() = default;
-		void CreateRenderTarget(UINT width, UINT height, bool multiSampling = false);
+		void CreateRenderTargetAndDepthStencil(UINT width, UINT height, bool multiSampling = false);
 		void SetRenderTarget(const FLOAT * color);
 
 	public:

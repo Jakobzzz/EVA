@@ -3,12 +3,10 @@
 #include <utils/D3DUtility.hpp>
 #include <utils/Shader.hpp>
 #include <utils/Buffer.hpp>
-#include <utils/RenderTexture.hpp>
 #include <utils/Input.hpp>
 #include <utils/Camera.hpp>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
-#include <imgui_dock.h>
 #include <tchar.h>
 #include <DirectXColors.h>
 
@@ -18,11 +16,8 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 
 namespace eva
 {
-	bool Application::m_isSceneHovered = false;
 	ComPtr<ID3D11Device> Application::m_device;
 	ComPtr<ID3D11DeviceContext> Application::m_deviceContext;
-	ComPtr<IDXGISwapChain> Application::m_swapChain;
-	ComPtr<ID3D11RenderTargetView> Application::m_mainRenderTargetView;
 
 	Application::Application()
 	{
@@ -41,7 +36,6 @@ namespace eva
 		m_shaders = std::make_unique<Shader>(m_device.Get(), m_deviceContext.Get());
 		m_camera = std::make_unique<Camera>(Vector3(0.f, 0.f, -2.f));
 		m_buffer = std::make_unique<Buffer>(m_device.Get(), m_deviceContext.Get());
-		m_sceneTexture = std::make_unique<RenderTexture>(m_device.Get(), m_deviceContext.Get());
 		m_model = std::make_unique<Model>(m_camera.get(), m_buffer.get(), m_shaders.get());
 	}
 
@@ -54,6 +48,7 @@ namespace eva
 
 		//Initialize Direct3D
 		CreateDeviceD3D(hwnd);
+		CreateViewport();
 
 		//Show the window
 		ShowWindow(hwnd, SW_SHOWDEFAULT);
@@ -68,7 +63,6 @@ namespace eva
 
 		//Setup style and reload saved dock settings
 		ImGui::StyleColorsDark();
-		ImGui::InitDock();
 
 		//Load resources
 		CreateObjects();
@@ -96,9 +90,12 @@ namespace eva
 
 			Input::Update();
 			PollEvents();
-			m_camera->Update(1 / 60.f, m_isSceneHovered); //60 FPS/second timestep
+			m_camera->Update(0.0001f);
 			ImGui_ImplDX11_NewFrame();
-			UpdateEditor();
+
+			/*ImGui::Begin("Hello");
+			ImGui::End();*/
+
 			RenderMainWindow();
 		}
 	}
@@ -111,17 +108,19 @@ namespace eva
 
 	void Application::RenderMainWindow()
 	{
-		m_deviceContext->OMSetRenderTargets(1, m_mainRenderTargetView.GetAddressOf(), nullptr);
-		m_deviceContext->ClearRenderTargetView(m_mainRenderTargetView.Get(), DirectX::Colors::Black);
+		m_deviceContext->RSSetViewports(1, &m_vp);
+		m_deviceContext->OMSetRenderTargets(1, m_mainRenderTargetView.GetAddressOf(), m_depthStencilView.Get());
+		m_deviceContext->ClearRenderTargetView(m_mainRenderTargetView.Get(), DirectX::Colors::Blue);
+		m_deviceContext->ClearDepthStencilView(m_depthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
+		RenderScene();
 		ImGui::Render();
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-		assert(!m_swapChain->Present(1, 0)); //Present with vsync (60 Hz)
+		assert(!m_swapChain->Present(0, 0));
 	}
 
 	void Application::RenderScene()
 	{
-		m_sceneTexture->SetRenderTarget(DirectX::Colors::Gray);
 		m_model->Draw();
 	}
 
@@ -137,135 +136,45 @@ namespace eva
 		UnregisterClass(_T("EVA"), m_windowClass.hInstance);
 	}
 
-	void Application::UpdateEditor()
+	void Application::CreateRenderTargetAndDepthStencil()
 	{
-		//Menu bar
-		if (ImGui::BeginMainMenuBar())
-		{
-			//Menu options
-			if (ImGui::BeginMenu("File"))
-			{
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Edit"))
-			{
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Assets"))
-			{
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Window"))
-			{
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Help"))
-			{
-				ImGui::EndMenu();
-			}
-
-			ImGui::EndMainMenuBar();
-		}
-
-		//Begin docking
-		ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
-		const ImGuiWindowFlags flags = (ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |
-			ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings |
-			ImGuiWindowFlags_NoTitleBar);
-		const float oldWindowRounding = ImGui::GetStyle().WindowRounding; ImGui::GetStyle().WindowRounding = 0;
-		const bool visible = ImGui::Begin("Docking system", nullptr, ImVec2(0, 0), 1.0f, flags);
-		ImGui::GetStyle().WindowRounding = oldWindowRounding;
-		ImGui::SetWindowPos(ImVec2(0, 50));
-
-		if (visible)
-		{
-			//Warning: If you remove or rename a dock make sure to
-			//check the imgui.ini file and remove/rename entry
-			ImGui::BeginDockspace();
-
-			if (ImGui::BeginDock("Scene")) 
-			{
-				//printf("%f\n", ImGui::GetWindowPos().x);
-				//Is there a general way to find the offset for the dock for the mouse position?
-				/*ImVec2 size = ImGui::GetContentRegionAvail();
-				ImGui::SetNextWindowPos(ImVec2(size.x - 300, size.y));
-				if (!ImGui::Begin("FPS overlay", nullptr, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
-					ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
-				{
-					ImGui::End();
-					return;
-				}
-
-				ImGui::TextColored(ImVec4(0.f, 1.0f, 0.0f, 1.0f), "Mouse position: (%d, %d)", Input::GetMousePositionX() - 16, Input::GetMousePositionY() - 88);
-				ImGui::End();*/
-
-				CreateSceneDock();
-			}
-			ImGui::EndDock();
-
-			if (ImGui::BeginDock("Inspector")) 
-			{
-			}
-			ImGui::EndDock();
-
-			if (ImGui::BeginDock("Hierarchy"))
-			{
-			}
-			ImGui::EndDock();
-
-			if (ImGui::BeginDock("Log")) 
-			{
-			}
-			ImGui::EndDock();
-
-			if (ImGui::BeginDock("Project")) 
-			{
-			}
-			ImGui::EndDock();
-
-			ImGui::EndDockspace();
-		}
-		ImGui::End();
-	}
-
-	void Application::CreateSceneDock()
-	{
-		m_isSceneHovered = ImGui::IsWindowHovered();
-		ImVec2 size = ImGui::GetContentRegionAvail();
-		UINT width = m_sceneTexture->GetWidth();
-		UINT height = m_sceneTexture->GetHeight();
-
-		//Resize the render texture
-		//Note: resizing the scene during runtime (very) frequently will likely cause a crash due to memory allocations
-		if (width != size.x || height != size.y)
-			m_sceneTexture->CreateRenderTarget(static_cast<UINT>(size.x), static_cast<UINT>(size.y));
-
-		RenderScene();
-		ImGui::Image(m_sceneTexture->GetShaderResourceView(), size);
-	}
-
-	void Application::CreateRenderTarget()
-	{
+		//Create render target
 		ID3D11Texture2D* pBackBuffer;
 		m_swapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
 		m_device->CreateRenderTargetView(pBackBuffer, nullptr, m_mainRenderTargetView.GetAddressOf());
 		SAFE_RELEASE(&pBackBuffer);
+
+		//Create depth stencil view
+		ID3D11Texture2D* depthStencilTexture;
+		D3D11_TEXTURE2D_DESC depthStencilDesc = { 0 };
+		depthStencilDesc.Width = WIDTH;
+		depthStencilDesc.Height = HEIGHT;
+		depthStencilDesc.MipLevels = 1;
+		depthStencilDesc.ArraySize = 1;
+		depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		depthStencilDesc.SampleDesc.Count = 1;
+		depthStencilDesc.SampleDesc.Quality = 0;
+		depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
+		depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+		depthStencilDesc.CPUAccessFlags = 0;
+		depthStencilDesc.MiscFlags = 0;
+
+		//Create texture
+		assert(!m_device->CreateTexture2D(&depthStencilDesc, NULL, &depthStencilTexture));
+
+		//Create the depth stencil view from the texture and description
+		assert(!m_device->CreateDepthStencilView(depthStencilTexture, NULL, m_depthStencilView.GetAddressOf()));
+		SAFE_RELEASE(&depthStencilTexture);
 	}
 
 	void Application::CreateDeviceD3D(HWND hWnd)
 	{
 		//Setup swap chain
 		DXGI_SWAP_CHAIN_DESC sd = { 0 };
-		sd.BufferCount = 2;
-		sd.BufferDesc.Width = 0;
-		sd.BufferDesc.Height = 0;
+		sd.BufferCount = 1;
+		sd.BufferDesc.Width = WIDTH;
+		sd.BufferDesc.Height = HEIGHT;
 		sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		sd.BufferDesc.RefreshRate.Numerator = 60;
-		sd.BufferDesc.RefreshRate.Denominator = 1;
 		sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 		sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 		sd.OutputWindow = hWnd;
@@ -279,9 +188,19 @@ namespace eva
 		D3D_FEATURE_LEVEL featureLevel;
 		const D3D_FEATURE_LEVEL featureLevelArray[2] = { D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_0, };
 		assert(!D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, featureLevelArray, ARRAYSIZE(featureLevelArray),
-				D3D11_SDK_VERSION, &sd, m_swapChain.GetAddressOf(), m_device.GetAddressOf(), &featureLevel, m_deviceContext.GetAddressOf()));
+			D3D11_SDK_VERSION, &sd, m_swapChain.GetAddressOf(), m_device.GetAddressOf(), &featureLevel, m_deviceContext.GetAddressOf()));
 
-		CreateRenderTarget();
+		CreateRenderTargetAndDepthStencil();
+	}
+
+	void Application::CreateViewport()
+	{
+		m_vp.Width = static_cast<FLOAT>(WIDTH);
+		m_vp.Height = static_cast<FLOAT>(HEIGHT);
+		m_vp.MinDepth = 0.0f;
+		m_vp.MaxDepth = 1.0f;
+		m_vp.TopLeftX = 0;
+		m_vp.TopLeftY = 0;
 	}
 
 	LRESULT Application::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -315,16 +234,6 @@ namespace eva
 		case WM_SYSKEYUP:
 			Keyboard::ProcessMessage(msg, wParam, lParam);
 			break;
-		case WM_SIZE:
-			if (m_device.Get() != nullptr && wParam != SIZE_MINIMIZED)
-			{
-				ImGui_ImplDX11_InvalidateDeviceObjects();
-				m_mainRenderTargetView.Reset();
-				m_swapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
-				CreateRenderTarget();
-				ImGui_ImplDX11_CreateDeviceObjects();
-			}
-			return 0;
 		case WM_SYSCOMMAND:
 			if ((wParam & 0xfff0) == SC_KEYMENU) //Disable ALT application menu
 				return 0;

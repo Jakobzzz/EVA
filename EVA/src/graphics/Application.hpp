@@ -5,20 +5,15 @@
 #pragma once
 #include <wrl.h>
 #include <memory>
+#include <d3d11.h>
 
 using namespace Microsoft::WRL;
-
-struct ID3D11Device;
-struct ID3D11DeviceContext;
-struct IDXGISwapChain;
-struct ID3D11RenderTargetView;
 
 namespace eva
 {
 	class Shader;
 	class Buffer;
 	class Model;
-	class RenderTexture;
 	class Camera;
 
 	class Application
@@ -34,15 +29,14 @@ namespace eva
 		void LoadShaders();
 		void Update();
 		void PollEvents();
-		void UpdateEditor();
 		void RenderMainWindow();
 		void RenderScene();
 		void CreateObjects();
 		void CreateDeviceD3D(HWND hWnd);
-		void CreateSceneDock();
+		void CreateViewport();
 
 	private:
-		static void CreateRenderTarget();
+		void CreateRenderTargetAndDepthStencil();
 		static LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	private:
@@ -50,16 +44,16 @@ namespace eva
 		std::unique_ptr<Buffer> m_buffer;
 		std::unique_ptr<Model> m_model;
 		std::unique_ptr<Camera> m_camera;
-		std::unique_ptr<RenderTexture> m_sceneTexture;
 
 	private:
-		WNDCLASSEX m_windowClass;
 		static ComPtr<ID3D11Device> m_device;
 		static ComPtr<ID3D11DeviceContext> m_deviceContext;
-		static ComPtr<IDXGISwapChain> m_swapChain;
-		static ComPtr<ID3D11RenderTargetView> m_mainRenderTargetView;
 
 	private:
-		static bool m_isSceneHovered;
+		D3D11_VIEWPORT m_vp;
+		WNDCLASSEX m_windowClass;
+		ComPtr<IDXGISwapChain> m_swapChain;
+		ComPtr<ID3D11RenderTargetView> m_mainRenderTargetView;
+		ComPtr<ID3D11DepthStencilView> m_depthStencilView;
 	};
 }
